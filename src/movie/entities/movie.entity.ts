@@ -17,6 +17,9 @@ export class MovieEntity {
   @Column()
   releaseYear: number;
 
+  @Column({ default: false })
+  isPublic: boolean;
+
   @CreateDateColumn()
   createAt: Date;
 
