@@ -1,14 +1,19 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { CreateMovieDto } from './dto/create-movie.dto';
+import { MovieEntity } from './entities/movie.entity';
+import { MovieService } from './movie.service';
 
 @Controller({ path: 'movies' })
 export class MovieController {
+  constructor(private readonly movieService: MovieService) {}
+
   @Get()
-  findAll(@Query('genre') genre: any) {
-    return genre ? `Films in genre ${genre}` : [{ title: 'fight club' }];
+  async findAll(): Promise<MovieEntity[]> {
+    return this.movieService.findAll();
   }
 
   @Post()
-  create(@Body() body: { title: string; genre: string }) {
-    return `Movie "${body.title}" was added`;
+  async create(@Body() dto: CreateMovieDto) {
+    return this.movieService.create(dto);
   }
 }
