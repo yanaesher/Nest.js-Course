@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateMovieDto } from './dto/create-movie.dto';
+import { MovieDto } from './dto/movie.dto';
 import { MovieEntity } from './entities/movie.entity';
 
 @Injectable()
@@ -22,7 +22,7 @@ export class MovieService {
     });
   }
 
-  async findById(id: number): Promise<MovieEntity> {
+  async findById(id: string): Promise<MovieEntity> {
     const movie = await this.movieRepository.findOne({
       where: {
         id,
@@ -34,8 +34,25 @@ export class MovieService {
     return movie;
   }
 
-  async create(dto: CreateMovieDto): Promise<MovieEntity> {
+  async create(dto: MovieDto): Promise<MovieEntity> {
     const movie = this.movieRepository.create(dto);
     return await this.movieRepository.save(movie);
+  }
+
+  async update(id: string, dto: MovieDto): Promise<boolean> {
+    const movie = await this.findById(id);
+    Object.assign(movie, dto);
+
+    await this.movieRepository.save(movie);
+
+    return true;
+  }
+
+  async delete(id: string): Promise<boolean> {
+    const movie = await this.findById(id);
+
+    await this.movieRepository.remove(movie);
+
+    return true;
   }
 }
