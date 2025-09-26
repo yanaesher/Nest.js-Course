@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { getTypeOrmConfig } from './config/typeorm.config';
 import { MovieModule } from './movie/movie.module';
 import { TaskModule } from './task/task.module';
+import { ReviewModule } from './review/review.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { TaskModule } from './task/task.module';
     }),
     TaskModule,
     MovieModule,
+    ReviewModule,
   ],
   controllers: [AppController],
   providers: [AppService],
