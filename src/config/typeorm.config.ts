@@ -14,6 +14,5 @@ export async function getTypeOrmConfig(
     database: configService.getOrThrow('POSTGRES_DB'),
     autoLoadEntities: true,
     synchronize: true,
-    logging: true,
   };
 }
