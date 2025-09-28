@@ -1,6 +1,5 @@
 generator client {
    provider = "prisma-client-js"
-   output   = "../generated/prisma"
 }
 
 datasource db {
@@ -18,10 +17,37 @@ model Movie {
    isAvailable Boolean @default(false) @map("is_available")
    genre       Genre   @default(DRAMA)
 
+   reviews Review[] @relation("movie_reviews")
+   actors  Actor[]  @relation("movie_actors")
+
    createAt  DateTime @default(now()) @map("create_at")
    updatedAt DateTime @updatedAt @map("updated_at")
 
    @@map("movies")
+}
+
+model Review {
+   id String @id @default(uuid())
+
+   text   String
+   rating Decimal @default(0.0)
+
+   movie   Movie  @relation("movie_reviews", fields: [movieId], references: [id], onDelete: Cascade)
+   movieId String @map("movie_id")
+
+   createAt  DateTime @default(now()) @map("create_at")
+   updatedAt DateTime @updatedAt @map("updated_at")
+
+   @@map("reviews")
+}
+
+model Actor {
+   id   String @id @default(uuid())
+   name String
+
+   movies Movie[] @relation("movie_actors")
+
+   @@map("actors")
 }
 
 enum Genre {
